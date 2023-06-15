@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id        Int    @id @default(autoincrement())
+  discordId String @unique
+
+  profiles Profile[]
+}
+
+model Profile {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  avatarURL    String?
+  canBroadcast Boolean?
+
+  discordAccount Account @relation(fields: [accountId], references: [discordId])
+  accountId      String
+  categoryId     String
+
+  whisperChannels WhisperChannel[]
+
+  @@unique([accountId, categoryId])
+}
+
+model Channel {
+  id           Int      @id @default(autoincrement())
+  channelId    String   @unique
+  canBroadcast Boolean?
+}
+
+model SubsidiaryServer {
+  id                 Int     @id @default(autoincrement())
+  serverId           String  @unique
+  isVerified         Boolean @default(false)
+  attachedCategoryId String  @unique
+}
+
+model WhisperChannel {
+  id              Int     @id @default(autoincrement())
+  channelId       String  @unique
+  linkedChannelId String  @unique
+  webhookURL      String? @unique
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+}
