@@ -66,6 +66,8 @@ export default newSlashCommand({
 			await webhook.send({
 				content: messageData,
 				username: '[ Operation Leader ]',
+				avatarURL:
+					'https://media.discordapp.net/attachments/1119025192946110464/1119025207462604820/AO8PoW04jMlcpQgkyt8U9qeqBVK1_KPa7IJOrKJmhP8BcW4iwTD6qhgtluejqXaguVlPpxrjddfSa0CdbDr716_0DcFJ8SCrsxum58S4MJVIrIWVgdYqs512.png?width=512&height=512',
 			});
 
 			await i.deleteReply();

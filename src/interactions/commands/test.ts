@@ -1,6 +1,5 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CategoryChannel, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { newSlashCommand } from '../../structures/BotClient';
-import { prisma } from '../../database';
 
 const data = new SlashCommandBuilder().setName('test').setDescription('Development only. Command to test');
 data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);

@@ -27,7 +27,8 @@ model Profile {
   accountId      String
   categoryId     String
 
-  whisperChannels WhisperChannel[]
+  whisperChannels WhisperChannel[] @relation("mainProfile")
+  targetChannels  WhisperChannel[] @relation("targetProfile")
 
   @@unique([accountId, categoryId])
 }
@@ -46,11 +47,14 @@ model SubsidiaryServer {
 }
 
 model WhisperChannel {
-  id              Int     @id @default(autoincrement())
-  channelId       String  @unique
-  linkedChannelId String  @unique
-  webhookURL      String? @unique
+  id              Int    @id @default(autoincrement())
+  channelId       String @unique
+  webhookURL      String @unique
+  targetChannelId String @unique
 
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], name: "mainProfile")
   profileId Int
+
+  target   Profile @relation(fields: [targetId], references: [id], name: "targetProfile")
+  targetId Int
 }
