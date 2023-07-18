@@ -1,16 +1,4 @@
-import {
-	ButtonInteraction,
-	ChatInputCommandInteraction,
-	Client,
-	Collection,
-	CommandInteraction,
-	Events,
-	GatewayIntentBits,
-	Interaction,
-	REST,
-	Routes,
-	SlashCommandBuilder,
-} from 'discord.js';
+import { ButtonInteraction, ChatInputCommandInteraction, Client, Collection, CommandInteraction, Events, GatewayIntentBits, Interaction, REST, Routes, SlashCommandBuilder } from 'discord.js';
 import * as path from 'path';
 import * as fs from 'fs';
 import { interactions } from './BaseInteraction';
@@ -21,13 +9,7 @@ import { ContextMenuCommandBuilder, ApplicationCommandType } from 'discord.js';
 import onMessageCreate from '../interactions/events/messageCreate';
 
 export const DEFAULT_INTENTS = {
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMembers,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildIntegrations,
-	],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildIntegrations],
 };
 
 export const slashCommands: Collection<string, SlashCommand> = new Collection();
@@ -64,7 +46,6 @@ export class BotClient extends Client {
 		this.loadInteractions<SlashCommand>('commands');
 		this.loadInteractions<Button>('buttons');
 		this.loadInteractions<SelectMenu>('selectmenu');
-		this.loadInteractions<Modal>('modals');
 		this.loadInteractions<ContextMenuCommandBuilder>('context');
 
 		this.assignEvents();
