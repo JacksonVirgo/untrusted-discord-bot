@@ -24,3 +24,12 @@ export async function createWebhook(channel: TextChannel) {
 	});
 	return webhook;
 }
+
+export interface MessageURLProps {
+	messageId: string;
+	channelId: string;
+	guildId: string;
+}
+export function createMessageURL({ messageId, channelId, guildId }: MessageURLProps) {
+	return `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
+}
