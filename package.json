@@ -7,7 +7,8 @@
 		"dev": "nodemon ./src/index.ts",
 		"build:prisma": "npx prisma format && npx prisma generate && npx prisma db push",
 		"build": "tsc",
-		"start": "pm2 start ./dist/index.js --name better-anonymity-sdg"
+		"start:local": "pm2 start ./dist/index.js --name better-anonymity-sdg",
+		"start": "node ./dist/index.js"
 	},
 	"keywords": [],
 	"author": "",
