@@ -30,6 +30,13 @@ export default newSlashCommand({
 		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
 		if (i.guildId !== config.MAIN_SERVER_ID) return i.reply({ content: 'This command can only be used in the main server', ephemeral: true });
 
+		await i.guild.members.fetch();
+		const member = i.guild.members.cache.get(i.user.id);
+		if (!member) return i.reply({ content: 'You are not in the server', ephemeral: true });
+
+		// Check if user is an ADMIN
+		if (!member.permissions.has('Administrator')) return i.reply({ content: 'You do not have permission to use this command', ephemeral: true });
+
 		switch (i.options.getSubcommand(true)) {
 			case 'account':
 				return createAccount(i);
