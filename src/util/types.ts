@@ -21,16 +21,7 @@ export function isTextChannelWithParent(channel: GuildBasedChannel): channel is 
 	return true;
 }
 
-type EveryChannel =
-	| CategoryChannel
-	| NewsChannel
-	| StageChannel
-	| TextChannel
-	| PrivateThreadChannel
-	| PublicThreadChannel<boolean>
-	| VoiceChannel
-	| ForumChannel
-	| APIInteractionDataResolvedChannel;
+type EveryChannel = CategoryChannel | NewsChannel | StageChannel | TextChannel | PrivateThreadChannel | PublicThreadChannel<boolean> | VoiceChannel | ForumChannel | APIInteractionDataResolvedChannel;
 
 export function isTextChannel(channel: EveryChannel): channel is TextChannel {
 	return channel.type == ChannelType.GuildText;
@@ -39,3 +30,6 @@ export function isTextChannel(channel: EveryChannel): channel is TextChannel {
 export function isCategory(channel: EveryChannel): channel is CategoryChannel {
 	return channel.type == ChannelType.GuildCategory;
 }
+
+export type Extension<T, E> = T & E;
+export type NonNullable<T> = T extends null | undefined ? never : T;

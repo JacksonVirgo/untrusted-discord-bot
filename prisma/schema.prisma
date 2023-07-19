@@ -11,11 +11,35 @@ datasource db {
 }
 
 model Account {
-  id        Int    @id @default(autoincrement())
-  discordId String @unique
+  id        Int       @id @default(autoincrement())
+  discordId String    @unique
+  profiles  Profile[]
 
-  profiles Profile[]
+  netCoins           Int           @default(0)
+  occuCoins          Int           @default(0)
+  transactionHistory Transaction[] @relation("target")
+  adminHistory       Transaction[] @relation("admin")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
+
+model Transaction {
+  id        Int @id @default(autoincrement())
+  accountId Int
+  adminId   Int
+
+  netCoinChange  Int
+  occuCoinChange Int
+
+  reason    String?
+  createdAt DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id], name: "target")
+  admin   Account @relation(fields: [adminId], references: [id], name: "admin")
+}
+
+// ANONYMOUS PROFILES
 
 model Profile {
   id           Int      @id @default(autoincrement())

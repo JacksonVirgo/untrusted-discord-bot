@@ -1,16 +1,24 @@
-import { ButtonInteraction, ChatInputCommandInteraction, Client, Collection, CommandInteraction, Events, GatewayIntentBits, Interaction, REST, Routes, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, Client, Collection, Events, GatewayIntentBits, Guild, REST, Routes, SlashCommandBuilder } from 'discord.js';
 import * as path from 'path';
 import * as fs from 'fs';
-import { interactions } from './BaseInteraction';
-import { Button, Event, Modal, SelectMenu } from './interactions';
+import { Button, Event, SelectMenu } from './interactions';
 import OnClientReady from '../interactions/events/clientReady';
 import OnInteraction from '../interactions/events/onInteraction';
-import { ContextMenuCommandBuilder, ApplicationCommandType } from 'discord.js';
 import onMessageCreate from '../interactions/events/messageCreate';
+import { Extension } from '../util/types';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 
 export const DEFAULT_INTENTS = {
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildIntegrations],
 };
+
+export type InteractionWrapper = {
+	isMainServer: boolean;
+	prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>;
+	guild: Guild;
+};
+export type CustomInteraction<T> = Extension<T, InteractionWrapper>;
 
 export const slashCommands: Collection<string, SlashCommand> = new Collection();
 export interface SlashCommand {

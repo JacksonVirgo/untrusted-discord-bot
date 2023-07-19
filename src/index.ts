@@ -1,6 +1,4 @@
-import config, { data } from './config';
-import { prisma } from './database';
-import { loadDMWebhooks } from './interactions/events/messageCreate';
+import config from './config';
 import { BotClient } from './structures/BotClient';
 
 export const client = new BotClient(config.DISCORD_CLIENT_ID, config.DISCORD_TOKEN);

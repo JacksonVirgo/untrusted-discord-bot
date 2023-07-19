@@ -1,13 +1,15 @@
-import { ChatInputCommandInteraction, Interaction, ModalSubmitInteraction } from 'discord.js';
+import { Interaction } from 'discord.js';
 import { slashCommands } from '../../structures/BotClient';
 import { Button, Modal, SelectMenu } from '../../structures/interactions';
 
 export default async function onInteraction(i: Interaction<any>) {
+	if (!i.guild) return;
+
 	if (i.isChatInputCommand()) {
 		const command = slashCommands.get(i.commandName);
 		if (!command) return console.error(`No command matching ${i.commandName} was found.`);
 		try {
-			command.execute(i as ChatInputCommandInteraction);
+			command.execute(i);
 		} catch (err) {
 			console.log(err);
 		}
