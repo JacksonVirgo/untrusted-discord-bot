@@ -1,13 +1,4 @@
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	CategoryChannel,
-	ChannelType,
-	EmbedBuilder,
-	SlashCommandBuilder,
-	TextChannel,
-} from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CategoryChannel, ChannelType, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder, TextChannel } from 'discord.js';
 import { newSlashCommand } from '../../structures/BotClient';
 import { prisma } from '../../database';
 import { fetchOrCreateWebhook } from '../../util/webhook';
@@ -15,19 +6,13 @@ import config from '../../config';
 
 const data = new SlashCommandBuilder().setName('broadcast').setDescription('Send an anonymous broadcast');
 data.addStringOption((option) => option.setName('message').setDescription('The message to send').setRequired(true));
-data.addChannelOption((option) =>
-	option
-		.setName('channel')
-		.setDescription('The channel to send the message to. Defaults to current')
-		.addChannelTypes(ChannelType.GuildText)
-		.setRequired(false)
-);
+data.addChannelOption((option) => option.setName('channel').setDescription('The channel to send the message to. Defaults to current').addChannelTypes(ChannelType.GuildText).setRequired(false));
 export default newSlashCommand({
 	data,
-	execute: async (i) => {
+	mainServer: true,
+	execute: async (i: ChatInputCommandInteraction) => {
 		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
 		if (i.channel?.type != ChannelType.GuildText) return i.reply({ content: 'This command can only be used in a text channel', ephemeral: true });
-		if (i.guildId !== config.MAIN_SERVER_ID) return i.reply({ content: 'This command can only be used in the main server', ephemeral: true });
 
 		await i.deferReply({ ephemeral: true });
 

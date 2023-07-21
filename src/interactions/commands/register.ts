@@ -1,4 +1,4 @@
-import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { newSlashCommand } from '../../structures/BotClient';
 import { prisma } from '../../database';
 
@@ -10,7 +10,7 @@ data.addStringOption((option) => option.setName('serverid').setDescription('The 
 
 export default newSlashCommand({
 	data,
-	execute: async (i) => {
+	execute: async (i: ChatInputCommandInteraction) => {
 		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
 
 		const category = i.options.getChannel('category', true);

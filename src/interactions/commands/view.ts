@@ -1,7 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
-import { CustomInteraction, newSlashCommand } from '../../structures/BotClient';
+import { newSlashCommand } from '../../structures/BotClient';
 import config from '../../config';
-import { prisma } from '../../database';
 import { formatAccountEmbed, getAccount } from '../../util/account';
 
 const data = new SlashCommandBuilder().setName('view').setDescription('View something (very descriptive)');
@@ -16,10 +15,9 @@ data.addSubcommand((sub) =>
 
 export default newSlashCommand({
 	data,
-	execute: async (i) => {
-		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
-		if (i.guildId !== config.MAIN_SERVER_ID) return i.reply({ content: 'This command can only be used in the main server', ephemeral: true });
-
+	mainServer: true,
+	execute: async (i: ChatInputCommandInteraction) => {
+		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });		
 		switch (i.options.getSubcommand(true)) {
 			case 'account':
 				return viewAccount(i);

@@ -26,9 +26,9 @@ data.addSubcommand((sub) =>
 
 export default newSlashCommand({
 	data,
-	execute: async (i) => {
+	mainServer: true,
+	execute: async (i: ChatInputCommandInteraction) => {
 		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
-		if (i.guildId !== config.MAIN_SERVER_ID) return i.reply({ content: 'This command can only be used in the main server', ephemeral: true });
 
 		await i.guild.members.fetch();
 		const member = i.guild.members.cache.get(i.user.id);

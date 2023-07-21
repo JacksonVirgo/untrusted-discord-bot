@@ -1,13 +1,4 @@
-import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
-	CategoryChannel,
-	ChannelType,
-	EmbedBuilder,
-	PermissionFlagsBits,
-	SlashCommandBuilder,
-} from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CategoryChannel, ChannelType, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { newSlashCommand } from '../../structures/BotClient';
 import { prisma } from '../../database';
 import config from '../../config';
@@ -29,9 +20,9 @@ data.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
 export default newSlashCommand({
 	data,
-	execute: async (i) => {
+	mainServer: true,
+	execute: async (i: ChatInputCommandInteraction) => {
 		if (!i.guild) return i.reply({ content: 'This command can only be used in a server', ephemeral: true });
-		if (i.guildId !== config.MAIN_SERVER_ID) return i.reply({ content: 'This command can only be used in the main server', ephemeral: true });
 
 		const user = i.options.getUser('user', false);
 		const name = i.options.getString('name', false);
@@ -46,7 +37,7 @@ export default newSlashCommand({
 		}
 
 		if (user) {
-			await prisma.profile.delete({
+			const checkProfile = await prisma.profile.findUnique({
 				where: {
 					accountId_categoryId: {
 						accountId: user.id,
@@ -54,12 +45,25 @@ export default newSlashCommand({
 					},
 				},
 			});
+
+			if (checkProfile)
+				await prisma.profile.delete({
+					where: {
+						id: checkProfile.id,
+					},
+				});
 		} else if (name) {
-			await prisma.profile.delete({
+			const checkProfile = await prisma.profile.findUnique({
 				where: {
 					name: name,
 				},
 			});
+			if (checkProfile)
+				await prisma.profile.delete({
+					where: {
+						id: checkProfile.id,
+					},
+				});
 		} else {
 			return i.reply({ content: 'You must provide a user or name', ephemeral: true });
 		}
